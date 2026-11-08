@@ -1,0 +1,4 @@
+- insert:
+    - id: dsh-peers-syh
+      name: 'dsh-peers-syh'
+      config: {}
