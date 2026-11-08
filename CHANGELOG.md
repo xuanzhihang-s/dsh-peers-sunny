@@ -2,6 +2,7 @@
 
 ## 0.7.0
 
+- 已发布到 npm：`npm i dsh-peers-syh@0.7.0`（dist-tags `latest`、`beta` 均指向 0.7.0）。
 - 设备表三源合并：服务端设备目录（可拨）+ `status().host.connectedClients`（此刻连入）+ `~/.dsh/remote/servers/*/host/trusted-peers.json`（历史信任），每行标注 `dialable` / `connected` / `trustedAt`。
 - 新增「仅连入」状态；对这类设备调用 `peer_delegate` 报 `PEER_NOT_DIALABLE` 并提示去那台设备打开「允许控制本机」。
 - 名字互报（PEER-HELLO）：派活时附带发起方自报名；对端调用 `peer_hello` 把身份行放在回复最后一行，发起端解析后写入 `peers.json` 的 `remoteName`，并从正文里剥掉该行。
