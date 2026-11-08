@@ -62,6 +62,18 @@
       },
       "versions": [
         {
+          "version": "0.7.0",
+          "publishTimestamp": 1794127902,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/xuanzhihang-s/dsh-peers-syh",
+            "commit": "a1e7e45fd1d5283b4bc778bd29e998a68a3b7685"
+          },
+          "engines": {
+            "dsh": ">=0.2.2-0 <0.3.0"
+          }
+        },
+        {
           "version": "0.1.0",
           "publishTimestamp": 1794120032,
           "source": {
