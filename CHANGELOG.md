@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.1
+
+- 修：手机窄屏（约 390px）下 Remote 弹窗排版塌陷——标题被左上角图标压住、主机行状态竖排、设备名被输入框盖住。新增 `@media (max-width:560px)` 补丁：面板行允许换行且输入框窄屏占满一行；Remote 头部标题换行并留出 54px 图标位；分组标题与主机行允许换行、状态列 `flex:0 0 auto`。
+- 修：`peer_hello` 报的是 Client 身份 deviceId，可拨的却是 Host 身份，两者不同。改为优先报 `status().host.deviceId`，并新增 `clientDeviceId` 字段；设备表剔除本机时同时排除两个身份。
+- 修：重启后第一次连对端常报 `REMOTE_PREFLIGHT_FAILED`（remote 侧握手尚未完成），原来只重试 1 次、间隔 1.5s，实测常连败两次。改为 1.5s / 4s / 8s 退避、最多 4 次尝试；该错误保证「没有变更被派发」，重试安全。
+
 ## 0.7.0
 
 - 已发布到 npm：`npm i dsh-peers-syh@0.7.0`（dist-tags `latest`、`beta` 均指向 0.7.0）。

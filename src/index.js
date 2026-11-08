@@ -29,16 +29,22 @@ async function log(line) {
 }
 
 // 重启后第一次连对端时，remote 端可能还没走完握手，会让 create/send 报 REMOTE_PREFLIGHT_FAILED；
-// 该错误保证「没有任何变更被派发」，因此换新的 operationId 重试一次是安全的。
+// 该错误保证「没有任何变更被派发」，因此换新的 operationId 重试是安全的。
+// 握手有时要 10 秒以上，单次重试不够：按 1.5s / 4s / 8s 退避，最多 4 次尝试。
+const PREFLIGHT_BACKOFF = [1500, 4000, 8000]
 async function withPreflightRetry(run) {
-  try {
-    return await run()
-  } catch (error) {
-    const message = String((error && error.message) || error)
-    if (!message.includes('REMOTE_PREFLIGHT_FAILED')) throw error
-    await log('preflight failed, retrying: ' + message.slice(0, 160))
-    await sleep(1500)
-    return run()
+  let attempt = 0
+  for (;;) {
+    try {
+      return await run()
+    } catch (error) {
+      const message = String((error && error.message) || error)
+      if (!message.includes('REMOTE_PREFLIGHT_FAILED') || attempt >= PREFLIGHT_BACKOFF.length) throw error
+      const wait = PREFLIGHT_BACKOFF[attempt]
+      attempt += 1
+      await log('preflight failed, retry ' + attempt + ' in ' + wait + 'ms: ' + message.slice(0, 160))
+      await sleep(wait)
+    }
   }
 }
 
@@ -279,17 +285,22 @@ function jsonOutput(schema) {
 
 // 面板里的「本机」行：显示 Remote 当前生效的身份名，以及配置里待生效的名字。
 async function selfInfo(ctx, store) {
+  // status().deviceId 是「Client 身份」，status().host.deviceId 才是「Host 身份」；
+  // 对端拨过来用的是 Host 身份，所以对外报名字时优先用 Host id。
   let deviceId = null
+  let clientDeviceId = null
   let effective = null
   try {
     const client = ctx.get('dshRemoteClient')
     const status = client && typeof client.status === 'function' ? client.status() : null
-    deviceId = (status && status.deviceId) || null
+    clientDeviceId = (status && status.deviceId) || null
+    deviceId = (status && status.host && status.host.deviceId) || clientDeviceId
     effective = (status && status.deviceName) || null
   } catch {}
   const configured = await readConfiguredDeviceName()
   return {
     deviceId,
+    clientDeviceId,
     platform: process.platform,
     name: effective || store.selfName || configured || hostname(),
     configuredName: configured || null,
@@ -403,11 +414,12 @@ async function rosterOf(ctx, store, signal) {
     if (!entry.name) entry.name = peer.name || null
     if (!entry.platform) entry.platform = peer.platform || null
   }
-  let selfId = null
+  const selfIds = new Set()
   try {
     const client = ctx.get('dshRemoteClient')
     const status = client && typeof client.status === 'function' ? client.status() : null
-    selfId = (status && status.deviceId) || null
+    if (status && status.deviceId) selfIds.add(status.deviceId)
+    if (status && status.host && status.host.deviceId) selfIds.add(status.host.deviceId)
   } catch {}
   const rows = []
   const add = (hostId, name, platform, flags, trustedAt, mode) => {
@@ -430,12 +442,12 @@ async function rosterOf(ctx, store, signal) {
     })
   }
   for (const entry of table.values()) {
-    if (selfId && entry.hostId === selfId) continue
+    if (selfIds.has(entry.hostId)) continue
     add(entry.hostId, entry.name, entry.platform, entry, entry.trustedAt, entry.mode)
   }
   // 只剩本地别名的历史条目（换了账号、设备下线）也保留，否则用户起的名字会凭空消失。
   for (const hostId of Object.keys(store.peers)) {
-    if (selfId && hostId === selfId) continue
+    if (selfIds.has(hostId)) continue
     if (rows.some((row) => row.hostId === hostId)) continue
     const record = store.peers[hostId] || {}
     if (!record.alias && !record.remoteName) continue
@@ -1070,7 +1082,13 @@ export function apply(ctx, config = {}) {
         const store = await loadStore()
         const info = await selfInfo(ctx, store)
         const line = helloLine({ name: info.name, deviceId: info.deviceId, platform: info.platform })
-        return sanitize({ name: info.name, deviceId: info.deviceId || '', platform: info.platform, line })
+        return sanitize({
+          name: info.name,
+          deviceId: info.deviceId || '',
+          clientDeviceId: info.clientDeviceId || '',
+          platform: info.platform,
+          line,
+        })
       },
     })
 

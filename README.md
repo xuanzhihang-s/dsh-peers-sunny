@@ -40,6 +40,12 @@ dsh plugin add dsh-peers-syh
 
 从源码 / git 索引源安装的六步说明在仓库根目录的 `FRIENDS.md`。装完需要**重启 DSH** 才会加载。
 
+> 国内镜像（`registry.npmmirror.com`）同步新版本有延迟，刚发布时可能报 `ETARGET: no matching version`。先查公共源确认版本存在，再指定源安装：
+>
+> ```bash
+> npm i dsh-peers-syh --registry=https://registry.npmjs.org
+> ```
+
 **两侧都装**才有双向能力：只装一侧时，只有装的那一侧能发起派活，对端只能在被派活时执行；反方向要等它自己装了插件、并且开了 Remote 的「允许控制本机」。
 
 ## 用法
@@ -106,6 +112,17 @@ agent → peer_delegate { peer: "小蜜", prompt: "列出 /sdcard/DCIM/Camera �
 | POST | `/dsh-peers-syh/api/self-name` | `{name}` 改本机名（写 `cordis.patch.yml` 的 `ds-harness-remote.config.deviceName`），返回 `restartRequired:true` |
 
 宿主侧不往 `index.html` 注入任何脚本（0.3.x 的实现已移除），UI 全部走 `dsh.client` 声明 + `exports["./client"]` 的浏览器模块；本插件不注册任何 `shell.overlay` 槽，也不改 Remote 的源码。
+
+### 窄屏（手机）适配（0.7.1 起）
+
+手机上（约 390px CSS 宽）原来的排版会塌：标题被左上角图标压住、主机行的「在线」被挤成竖排两字、设备行的输入框把名字盖住。0.7.1 加了一段 `@media (max-width:560px)` 的补丁，全部选择器都锚在 `.dshRemotePage` 与 `.dshPeers*` 上：
+
+- 面板自己的行允许换行，输入框在窄屏占满一行（`flex:1 1 100%`）。
+- Remote 弹窗头部让标题/副标题换行而不是省略号截断，并给左上角图标留出 54px 内边距；窄屏隐藏「Star 项目」装饰链接。
+- 分组标题（「主机」）可换行、「允许控制本机」开关按内容宽固定，不再把「主机」压成竖排。
+- 主机行允许换行，状态列 `flex:0 0 auto; white-space:nowrap`，元信息 `overflow-wrap:anywhere`。
+
+这些是**覆盖上游样式**，不改 `ds-harness-remote` 的文件；上游大改类名时会失效（失效表现为回到原排版，不影响功能）。
 
 ## 工作方式
 
