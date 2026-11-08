@@ -3,7 +3,7 @@ import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { homedir, hostname } from 'node:os'
 import { dirname, join } from 'node:path'
 
-export const name = 'dsh-peers-syh'
+export const name = 'dsh-peers-sunny'
 // 不用对象级 inject：apply 必须尽早跑，桌面端 index 注入表是启动时一次性收集的（同 dsh-whale-widget 的教训）。
 // tools / webServer 都在 apply 内部用 ctx.inject([...]) 局部等待。
 
@@ -58,7 +58,7 @@ function withTimeout(promise, ms) {
 }
 
 const PROMPT_SECTION = [
-  '## 对端设备（dsh-peers-syh）',
+  '## 对端设备（dsh-peers-sunny）',
   '你可以把任务派给用户的其他设备（另一台电脑或手机）上的 DSH。',
   '- 用户提到某台设备时，先调用 peer_list 取到它的别名和 hostId；别名不存在或有歧义就反问用户，不要猜。',
   '- 用户想一次给多台设备命名时，用 peer_aliases 传 {hostId 或当前别名: 新名字} 一次写完；空字符串表示清空这个名字。',
@@ -118,7 +118,7 @@ async function profileDir() {
     try {
       const pkg = JSON.parse(await readFile(join(root, name, 'package.json'), 'utf8'))
       const bundles = (pkg && pkg.dsh && pkg.dsh.profile && Array.isArray(pkg.dsh.profile.bundles)) ? pkg.dsh.profile.bundles : []
-      if (bundles.some((entry) => (typeof entry === 'string' ? entry : entry && entry.name) === 'dsh-peers-syh')) return join(root, name)
+      if (bundles.some((entry) => (typeof entry === 'string' ? entry : entry && entry.name) === 'dsh-peers-sunny')) return join(root, name)
     } catch {}
   }
   return null
@@ -473,9 +473,9 @@ function helloLine(value) {
 
 // 派活文本尾部附一段自报名：总是先报自己是谁，只有在还不知道对端名字时才请对端回一行。
 function helloTrailer(intro, ask) {
-  const lines = ['', '---', '[dsh-peers-syh] 发起方设备：' + helloLine(intro)]
+  const lines = ['', '---', '[dsh-peers-sunny] 发起方设备：' + helloLine(intro)]
   if (ask) {
-    lines.push('若对端也装了 dsh-peers-syh：请在回复的最后一行原样输出一行设备自报名（不要包在代码块里，不要附加解释）：')
+    lines.push('若对端也装了 dsh-peers-sunny：请在回复的最后一行原样输出一行设备自报名（不要包在代码块里，不要附加解释）：')
     lines.push(HELLO_TAG + ' {"name":"<你所在设备的名字，不超过 16 字>","platform":"<linux/win32/darwin/android>"}')
   }
   return lines.join('\n')
@@ -557,7 +557,7 @@ export function apply(ctx, config = {}) {
 
   function reportText(task) {
     const lines = [
-      '[PEER REPORT] 对端任务结束（dsh-peers-syh 自动回报）',
+      '[PEER REPORT] 对端任务结束（dsh-peers-sunny 自动回报）',
       'taskId: ' + task.taskId,
       'peer: ' + task.alias + ' (' + task.hostId + ')',
       'status: ' + task.status,
@@ -829,14 +829,14 @@ export function apply(ctx, config = {}) {
       req.on('error', reject)
     })
 
-    route('/dsh-peers-syh/api/peers', async (req, res) => {
+    route('/dsh-peers-sunny/api/peers', async (req, res) => {
       const store = await loadStore()
       const roster = await rosterOf(ctx, store, AbortSignal.timeout(20000))
       send(res, 200, { peers: roster.rows, remoteError: roster.error, self: await selfInfo(ctx, store) })
     })
 
     // 本机名：写进 profile 的 Remote 配置，重启后由 Remote 读取并成为本机身份名。
-    route('/dsh-peers-syh/api/self-name', async (req, res) => {
+    route('/dsh-peers-sunny/api/self-name', async (req, res) => {
       if (req.method !== 'POST') { send(res, 405, { error: 'POST only' }); return }
       const body = await readBody(req)
       if (typeof body.name !== 'string') { send(res, 400, { error: 'name 必须是字符串' }); return }
@@ -856,7 +856,7 @@ export function apply(ctx, config = {}) {
       send(res, 200, { ok: true, name, file, restartRequired: true })
     })
 
-    route('/dsh-peers-syh/api/alias', async (req, res) => {
+    route('/dsh-peers-sunny/api/alias', async (req, res) => {
       if (req.method !== 'POST') { send(res, 405, { error: 'POST only' }); return }
       const body = await readBody(req)
       const hostId = String(body.hostId || '').trim()
@@ -878,7 +878,7 @@ export function apply(ctx, config = {}) {
 
     // 一次给多台设备改名：整批校验、一次落盘，避免「改了三台只成功两台」。
     // 别名传空串表示清空（恢复未命名）。
-    route('/dsh-peers-syh/api/aliases', async (req, res) => {
+    route('/dsh-peers-sunny/api/aliases', async (req, res) => {
       if (req.method !== 'POST') { send(res, 405, { error: 'POST only' }); return }
       const body = await readBody(req)
       const input = body && body.aliases
@@ -1069,7 +1069,7 @@ export function apply(ctx, config = {}) {
 
     register({
       name: 'peer_hello',
-      description: 'Return this device\u2019s identity line for dsh-peers-syh name exchange. When a delegated task carries a PEER-HELLO request, call this and put the returned {line} verbatim as the last line of your reply.',
+      description: 'Return this device\u2019s identity line for dsh-peers-sunny name exchange. When a delegated task carries a PEER-HELLO request, call this and put the returned {line} verbatim as the last line of your reply.',
       parameters: { type: 'object', properties: {}, required: [], additionalProperties: false },
       output: jsonOutput({
         type: 'object',
@@ -1301,7 +1301,7 @@ export function apply(ctx, config = {}) {
 
     if (ctx.get('systemPrompt') && typeof ctx.get('systemPrompt').section === 'function') {
       const registry = ctx.get('systemPrompt')
-      tc.effect(() => registry.section({ name: 'dsh-peers-syh', order: 60, text: PROMPT_SECTION }))
+      tc.effect(() => registry.section({ name: 'dsh-peers-sunny', order: 60, text: PROMPT_SECTION }))
     }
 
     tc.effect(() => {

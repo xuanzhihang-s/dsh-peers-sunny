@@ -1,5 +1,5 @@
 /**
- * dsh-peers-syh - client half (browser bundle, no build step).
+ * dsh-peers-sunny - client half (browser bundle, no build step).
  *
  * Loaded through window.__ModuleLoader__.load({ id, factory }), like every
  * out-of-tree DSH client plugin. The factory gets the host's shared require,
@@ -12,17 +12,17 @@
  * with it, and nothing floats on the chat surface. No other plugin's DOM is
  * edited and no host file is touched.
  *
- * All data comes from the host half's own routes under /dsh-peers-syh/api.
+ * All data comes from the host half's own routes under /dsh-peers-sunny/api.
  */
 window.__ModuleLoader__.load({
-  id: "dsh-peers-syh",
+  id: "dsh-peers-sunny",
   factory: () => {
     var module = { exports: {} };
     var exports = module.exports;
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 
-    const API = "/dsh-peers-syh/api";
-    const CSS_ID = "dsh-peers-syh/panel";
+    const API = "/dsh-peers-sunny/api";
+    const CSS_ID = "dsh-peers-sunny/panel";
     const PAGE_SELECTOR = ".dshRemotePage";
     const BODY_SELECTOR = ".dshRemotePageBody";
     const FOOTER_SELECTOR = ".dshRemoteAccountFooter";

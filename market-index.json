@@ -37,7 +37,7 @@
   },
   "plugins": [
     {
-      "name": "dsh-peers-syh",
+      "name": "dsh-peers-sunny",
       "title": {
         "en": "Peer Devices",
         "zh": "对端设备"
@@ -96,7 +96,7 @@
           "publishTimestamp": 1794120032,
           "source": {
             "type": "git",
-            "url": "https://github.com/xuanzhihang-s/dsh-peers-syh",
+            "url": "https://github.com/xuanzhihang-s/dsh-peers-sunny",
             "commit": "6252a4778f4b731d13ec8e75050b2f1b5469acfc"
           },
           "engines": {
@@ -105,9 +105,9 @@
         }
       ],
       "repository": {
-        "url": "https://github.com/xuanzhihang-s/dsh-peers-syh"
+        "url": "https://github.com/xuanzhihang-s/dsh-peers-sunny"
       },
-      "homepage": "https://github.com/xuanzhihang-s/dsh-peers-syh#readme"
+      "homepage": "https://github.com/xuanzhihang-s/dsh-peers-sunny#readme"
     }
   ]
 }

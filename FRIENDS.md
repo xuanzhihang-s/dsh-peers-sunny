@@ -24,19 +24,19 @@
 
 验证：在远程工作台弹窗里能看到对方设备，状态在线。
 
-## 第三步：装 dsh-peers-syh（两侧都装）
+## 第三步：装 dsh-peers-sunny（两侧都装）
 
-插件页 → 添加插件 → 输入 `dsh-peers-syh`。装完**重启 DSH**。
+插件页 → 添加插件 → 输入 `dsh-peers-sunny`。装完**重启 DSH**。
 
 如果插件页搜不到（索引还没刷到），用索引源安装：插件 → 发现 → 添加索引源，填
 
 ```
-https://cdn.jsdelivr.net/gh/xuanzhihang-s/dsh-peers-syh@main/market-index.json
+https://cdn.jsdelivr.net/gh/xuanzhihang-s/dsh-peers-sunny@main/market-index.json
 ```
 
-或者从源码装：把仓库目录放进 `~/.dsh/profiles/desktop/node_modules/dsh-peers-syh/`，
-在 profile 的 `package.json` 里把 `dsh-peers-syh` 加进 `dsh.profile.bundles` 与 `dependencies`
-（`"dsh-peers-syh": "link:<仓库绝对路径>"`），再跑一次 `pnpm install`、重启 DSH。
+或者从源码装：把仓库目录放进 `~/.dsh/profiles/desktop/node_modules/dsh-peers-sunny/`，
+在 profile 的 `package.json` 里把 `dsh-peers-sunny` 加进 `dsh.profile.bundles` 与 `dependencies`
+（`"dsh-peers-sunny": "link:<仓库绝对路径>"`），再跑一次 `pnpm install`、重启 DSH。
 
 ## 第四步：起名
 

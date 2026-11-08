@@ -19,14 +19,14 @@ const fixture = [
   '    config:',
   '      serverUrl: https://dsh.r2049.cn',
   '      deviceName: OLD-NAME',
-  '  - id: dsh-peers-syh',
-  '    name: dsh-peers-syh',
+  '  - id: dsh-peers-sunny',
+  '    name: dsh-peers-sunny',
   '    config: {}',
   '',
 ].join('\n')
 const configPath = join(profile, 'cordis.patch.yml')
 writeFileSync(configPath, fixture)
-writeFileSync(join(profile, 'package.json'), JSON.stringify({ name: 'desktop', dsh: { profile: { bundles: ['dsh-peers-syh'] } } }))
+writeFileSync(join(profile, 'package.json'), JSON.stringify({ name: 'desktop', dsh: { profile: { bundles: ['dsh-peers-sunny'] } } }))
 
 const { apply } = await import('../src/index.js')
 console.log('SANDBOX', sandbox)
@@ -74,27 +74,27 @@ function call(path, init = {}) {
   })
 }
 
-const before = await call('/dsh-peers-syh/api/peers')
+const before = await call('/dsh-peers-sunny/api/peers')
 const selfBefore = JSON.parse(before.body).self
 console.log('SELF BEFORE', JSON.stringify(selfBefore))
 
-const bad = await call('/dsh-peers-syh/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '   ' }) })
+const bad = await call('/dsh-peers-sunny/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '   ' }) })
 console.log('BAD', bad.status, bad.body)
 
-const ok = await call('/dsh-peers-syh/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '书房台式机' }) })
+const ok = await call('/dsh-peers-sunny/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '书房台式机' }) })
 console.log('SET', ok.status, ok.body)
 console.log('CONFIG1', JSON.stringify(readFileSync(configPath, 'utf8')))
 console.log('BACKUP', existsSync(configPath + '.bak-peers'))
 
-const again = await call('/dsh-peers-syh/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '游戏本' }) })
+const again = await call('/dsh-peers-sunny/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '游戏本' }) })
 console.log('SET2', again.status, again.body)
 console.log('CONFIG2', JSON.stringify(readFileSync(configPath, 'utf8')))
 
-await call('/dsh-peers-syh/api/alias', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ hostId: 'host-a', alias: '手机：荣耀7Rro' }) })
-const clash = await call('/dsh-peers-syh/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '手机：荣耀7Rro' }) })
+await call('/dsh-peers-sunny/api/alias', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ hostId: 'host-a', alias: '手机：荣耀7Rro' }) })
+const clash = await call('/dsh-peers-sunny/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '手机：荣耀7Rro' }) })
 console.log('CLASH', clash.status, clash.body)
 
-const after = await call('/dsh-peers-syh/api/peers')
+const after = await call('/dsh-peers-sunny/api/peers')
 console.log('SELF AFTER', JSON.stringify(JSON.parse(after.body).self))
 
 // 第二个 profile：config 里还没有 deviceName，验证插入位置与缩进。
@@ -108,12 +108,12 @@ writeFileSync(config2, [
   '    config:',
   '      enabled: true',
   '      role: host',
-  '  - id: dsh-peers-syh',
-  '    name: dsh-peers-syh',
+  '  - id: dsh-peers-sunny',
+  '    name: dsh-peers-sunny',
   '    config: {}',
   '',
 ].join('\n'))
 process.env.DSH_PROFILE_DIR = profile2
-const insert = await call('/dsh-peers-syh/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '客厅主机' }) })
+const insert = await call('/dsh-peers-sunny/api/self-name', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: '客厅主机' }) })
 console.log('INSERT', insert.status, insert.body)
 console.log('CONFIG3', JSON.stringify(readFileSync(config2, 'utf8')))

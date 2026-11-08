@@ -1,4 +1,4 @@
-# dsh-peers-syh
+# dsh-peers-sunny
 
 给每台 DSH 设备起个名字，然后让一个 agent 直接给另一台设备上的 agent 派活。
 
@@ -25,14 +25,14 @@
 
 不用记命令：把下面这段整句发给你的 DSH（桌面端或 dsh-Go 手机端），它自己会装。
 
-> 按 https://github.com/xuanzhihang-s/dsh-peers-syh 的 README「让 AI 自己装」一节，帮我把 dsh-peers-syh 装到本机并配好；需要登录、扫码、输密码或点授权的时候停下来等我。
+> 按 https://github.com/xuanzhihang-s/dsh-peers-sunny 的 README「让 AI 自己装」一节，帮我把 dsh-peers-sunny 装到本机并配好；需要登录、扫码、输密码或点授权的时候停下来等我。
 
 给 agent 的执行清单：
 
 1. 确认已装 `ds-harness-remote` 并登录同一账号（Remote 弹窗里能看到对方设备）。
 2. 定位当前 profile 目录：`~/.dsh/profiles/<profile>`（桌面端是 `desktop`，dsh-Go 手机端是 `web`）。
-3. 在该目录执行：`npm i dsh-peers-syh@0.7.2 --registry=https://registry.npmjs.org`。
-4. 把 `"dsh-peers-syh"` **同时**写进该 profile 的 `package.json` 的 `dependencies` 和 `dsh.profile.bundles`。只写 bundles 会被 npm/pnpm 当多余包清掉，插件页会显示「异常 + 未安装」。
+3. 在该目录执行：`npm i dsh-peers-sunny@0.7.2 --registry=https://registry.npmjs.org`。
+4. 把 `"dsh-peers-sunny"` **同时**写进该 profile 的 `package.json` 的 `dependencies` 和 `dsh.profile.bundles`。只写 bundles 会被 npm/pnpm 当多余包清掉，插件页会显示「异常 + 未安装」。
 5. 重启 DSH（手机端重启 App）。重启后 Remote「远程工作台」弹窗里会出现「设备名称」区块。
 6. 给两台设备起名，然后试一句：让它报告对方的工作目录。
 
@@ -52,10 +52,10 @@
 
 ## 安装
 
-插件页 → 添加插件 → 输入 `dsh-peers-syh`（已发布到 npm）；或命令行：
+插件页 → 添加插件 → 输入 `dsh-peers-sunny`（已发布到 npm）；或命令行：
 
 ```bash
-dsh plugin add dsh-peers-syh
+dsh plugin add dsh-peers-sunny
 ```
 
 从源码 / git 索引源安装的六步说明在仓库根目录的 `FRIENDS.md`。装完需要**重启 DSH** 才会加载。
@@ -63,7 +63,7 @@ dsh plugin add dsh-peers-syh
 > 国内镜像（`registry.npmmirror.com`）同步新版本有延迟，刚发布时可能报 `ETARGET: no matching version`。先查公共源确认版本存在，再指定源安装：
 >
 > ```bash
-> npm i dsh-peers-syh --registry=https://registry.npmjs.org
+> npm i dsh-peers-sunny --registry=https://registry.npmjs.org
 > ```
 
 **两侧都装**才有双向能力：只装一侧时，只有装的那一侧能发起派活，对端只能在被派活时执行；反方向要等它自己装了插件、并且开了 Remote 的「允许控制本机」。
@@ -126,10 +126,10 @@ agent → peer_delegate { peer: "小蜜", prompt: "列出 /sdcard/DCIM/Camera �
 
 | 方法 | 路径 | 作用 |
 | --- | --- | --- |
-| GET | `/dsh-peers-syh/api/peers` | 三源合并的设备列表（`dialable`/`online`/`connected`/`trustedAt`/`mode`）+ 别名 + `remoteName` + Remote 错误 |
-| POST | `/dsh-peers-syh/api/alias` | `{hostId, alias}` 单台改名 |
-| POST | `/dsh-peers-syh/api/aliases` | `{aliases:{hostId:alias,…}}` 批量改名，最多 50 台；空字符串表示清空名称 |
-| POST | `/dsh-peers-syh/api/self-name` | `{name}` 改本机名（写 `cordis.patch.yml` 的 `ds-harness-remote.config.deviceName`），返回 `restartRequired:true` |
+| GET | `/dsh-peers-sunny/api/peers` | 三源合并的设备列表（`dialable`/`online`/`connected`/`trustedAt`/`mode`）+ 别名 + `remoteName` + Remote 错误 |
+| POST | `/dsh-peers-sunny/api/alias` | `{hostId, alias}` 单台改名 |
+| POST | `/dsh-peers-sunny/api/aliases` | `{aliases:{hostId:alias,…}}` 批量改名，最多 50 台；空字符串表示清空名称 |
+| POST | `/dsh-peers-sunny/api/self-name` | `{name}` 改本机名（写 `cordis.patch.yml` 的 `ds-harness-remote.config.deviceName`），返回 `restartRequired:true` |
 
 宿主侧不往 `index.html` 注入任何脚本（0.3.x 的实现已移除），UI 全部走 `dsh.client` 声明 + `exports["./client"]` 的浏览器模块；本插件不注册任何 `shell.overlay` 槽，也不改 Remote 的源码。
 

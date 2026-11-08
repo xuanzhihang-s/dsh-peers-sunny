@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+- **改名**：`dsh-peers-syh` → `dsh-peers-sunny`（npm 包名、GitHub 仓库、bundle id、HTTP 路由前缀 `/dsh-peers-sunny/api/*`、日志与提示文案全部一致改名）。旧包 `dsh-peers-syh` 不再更新，已装旧包的用户需要卸载后重装。
+- 描述改为「对等」视角：两台设备的 agent 可以互相派活、互相读写对方工作区、接力完成任务。
+- 无功能变更。
+
 ## 0.7.2
 
 - README 新增「让 AI 自己装（一句话）」：给出可直接粘给 DSH 的一句话指令 + agent 执行清单（profile 定位、npm 源、dependencies 与 bundles 必须双写、手机端完全访问与同一 Remote 账号）。
