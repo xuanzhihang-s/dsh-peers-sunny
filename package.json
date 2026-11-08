@@ -1,6 +1,6 @@
 {
   "name": "dsh-peers-sunny",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "让两台设备上的 DSH 互为对端：互相派活、互相翻对方机器的文件、接着对方的活继续干（基于 ds-harness-remote）；每台设备可起名，面板长在 Remote 的「远程工作台」弹窗里。",
   "keywords": [
     "dsh",

@@ -677,6 +677,7 @@ export function apply(ctx, config = {}) {
       return
     }
     let failures = 0
+    let readFailures = 0
     let notifiedInput = false
     let lastRaw = ''
     await log('watch start ' + task.taskId + ' session ' + task.sessionId + ' origin ' + task.originSessionId)
@@ -742,9 +743,18 @@ export function apply(ctx, config = {}) {
               CLIENT_TIMEOUT,
             )
           } catch (error) {
-            await finish(task, 'done', task.reply, '读取结果失败：' + String((error && error.message) || error))
-            return
+            readFailures += 1
+            task.lastError = '读取结果失败：' + String((error && error.message) || error)
+            await log('read error #' + readFailures + ' ' + task.lastError)
+            if (controller.signal.aborted) return
+            if (readFailures >= 5) {
+              await finish(task, 'done', task.reply, task.lastError + '（对端已跑完，可用 remote_read_session 直接看记录）')
+              return
+            }
+            await sleep(1500 * readFailures, controller.signal)
+            continue
           }
+          readFailures = 0
           await finish(task, 'done', lastAssistantText(history && history.records))
           return
         }

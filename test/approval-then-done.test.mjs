@@ -5,7 +5,7 @@ import { join } from 'node:path'
 process.env.USERPROFILE = mkdtempSync(join(tmpdir(), 'peers-'))
 process.env.HOME = process.env.USERPROFILE
 
-const mod = await import('file:///' + 'C:/Users/SUNNY/Documents/20261108互操作/index.v0.2.0.js')
+const mod = await import(new URL('../src/index.js', import.meta.url).href)
 const seq = ['running', 'needs_user_input', 'running', 'idle']
 let i = 0
 const client = {

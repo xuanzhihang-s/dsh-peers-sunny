@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1
+
+- 修：对端跑完但取结果那一次 RPC 恰好断线时，任务被标成 done 却没有正文（只留下「读取结果失败：connection no longer available」）。现在读结果失败会重试最多 5 次（退避 1.5s/3s/4.5s/6s），仍失败才收尾，并在错误里提示可用 remote_read_session 直接看对端记录。
+- 修：两个测试文件仍在 import 工作区里的历史快照 index.v0.2.0.js（绝对路径，别人机器上必然失败），改为 import ../src/index.js。现在 9 个测试都跑的是当前源码。
+
 ## 0.8.0
 
 - **改名**：`dsh-peers-syh` → `dsh-peers-sunny`（npm 包名、GitHub 仓库、bundle id、HTTP 路由前缀 `/dsh-peers-sunny/api/*`、日志与提示文案全部一致改名）。旧包 `dsh-peers-syh` 不再更新，已装旧包的用户需要卸载后重装。
