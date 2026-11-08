@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "跨设备互联（卫星插件）",
+    "description": "给每台 DSH 设备起名，并让一个 agent 直接给另一台设备上的 agent 派活（基于 ds-harness-remote）。"
+  }
+}

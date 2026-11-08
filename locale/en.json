@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Peers Bridge (Multi-Device)",
+    "description": "Name each DSH device and let one agent delegate work to an agent on another device, over ds-harness-remote."
+  }
+}

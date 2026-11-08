@@ -43,8 +43,8 @@
         "zh": "对端设备"
       },
       "description": {
-        "en": "Name your other DSH devices and let one agent delegate a task to another through ds-harness-remote.",
-        "zh": "给每台 DSH 设备起名，让一个 agent 直接给另一台设备上的 agent 派活（基于 ds-harness-remote）。"
+        "en": "Name every DSH device (dialable / connected / trusted-only), exchange names over the delegation channel, and let one agent hand a task to the agent on another device through ds-harness-remote.",
+        "zh": "给每台 DSH 设备起名（可拨 / 已连接 / 仅连入三源合并），名字跨设备互报，并让一个 agent 直接给另一台设备上的 agent 派活（基于 ds-harness-remote）；面板长在 Remote 的「远程工作台」弹窗里。"
       },
       "author": "SYH",
       "metadata": {
@@ -53,7 +53,8 @@
           "remote",
           "peer",
           "multi-device",
-          "agent"
+          "agent",
+          "devices"
         ],
         "labels": [
           "experimental"
