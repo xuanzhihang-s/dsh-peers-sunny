@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.2
+
+- README 新增「让 AI 自己装（一句话）」：给出可直接粘给 DSH 的一句话指令 + agent 执行清单（profile 定位、npm 源、dependencies 与 bundles 必须双写、手机端完全访问与同一 Remote 账号）。
+- 无代码改动。
+
 ## 0.7.1
 
 - 修：手机窄屏（约 390px）下 Remote 弹窗排版塌陷——标题被左上角图标压住、主机行状态竖排、设备名被输入框盖住。新增 `@media (max-width:560px)` 补丁：面板行允许换行且输入框窄屏占满一行；Remote 头部标题换行并留出 54px 图标位；分组标题与主机行允许换行、状态列 `flex:0 0 auto`。

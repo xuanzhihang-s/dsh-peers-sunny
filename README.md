@@ -21,6 +21,26 @@
 - 不共享剪贴板、不投屏、不做双端同时编辑同一个会话；
 - 不替代 Remote 的审批：对端需要人点确认时，只有人能点。
 
+## 让 AI 自己装（一句话）
+
+不用记命令：把下面这段整句发给你的 DSH（桌面端或 dsh-Go 手机端），它自己会装。
+
+> 按 https://github.com/xuanzhihang-s/dsh-peers-syh 的 README「让 AI 自己装」一节，帮我把 dsh-peers-syh 装到本机并配好；需要登录、扫码、输密码或点授权的时候停下来等我。
+
+给 agent 的执行清单：
+
+1. 确认已装 `ds-harness-remote` 并登录同一账号（Remote 弹窗里能看到对方设备）。
+2. 定位当前 profile 目录：`~/.dsh/profiles/<profile>`（桌面端是 `desktop`，dsh-Go 手机端是 `web`）。
+3. 在该目录执行：`npm i dsh-peers-syh@0.7.2 --registry=https://registry.npmjs.org`。
+4. 把 `"dsh-peers-syh"` **同时**写进该 profile 的 `package.json` 的 `dependencies` 和 `dsh.profile.bundles`。只写 bundles 会被 npm/pnpm 当多余包清掉，插件页会显示「异常 + 未安装」。
+5. 重启 DSH（手机端重启 App）。重启后 Remote「远程工作台」弹窗里会出现「设备名称」区块。
+6. 给两台设备起名，然后试一句：让它报告对方的工作目录。
+
+手机端两点注意：
+
+- 在 dsh-Go 里把权限预设设成**完全访问**，否则 npm 安装与写 profile 会被审批卡住、装不完整。
+- 跨网需要两端登录同一个 Remote 账号（默认服务端 `dsh.r2049.cn`，用知乎账号登录）。
+
 ## 前置要求
 
 | 项目 | 要求 |
