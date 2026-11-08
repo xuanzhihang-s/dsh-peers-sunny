@@ -1,0 +1,82 @@
+{
+  "format": 1,
+  "title": {
+    "en": "SYH's DSH plugins",
+    "zh": "SYH 的 DSH 插件"
+  },
+  "description": {
+    "en": "Plugins by SYH for DeepSeek Harness.",
+    "zh": "SYH 做的 DeepSeek Harness 插件。"
+  },
+  "metadata": {
+    "categories": {
+      "remote": {
+        "title": {
+          "en": "Remote and devices",
+          "zh": "远程与设备"
+        }
+      }
+    },
+    "labels": {
+      "experimental": {
+        "title": {
+          "en": "Experimental",
+          "zh": "实验性"
+        }
+      }
+    },
+    "sortKeys": {
+      "quality": {
+        "title": {
+          "en": "Quality",
+          "zh": "质量"
+        },
+        "order": "desc"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "name": "dsh-peers-syh",
+      "title": {
+        "en": "Peer Devices",
+        "zh": "对端设备"
+      },
+      "description": {
+        "en": "Name your other DSH devices and let one agent delegate a task to another through ds-harness-remote.",
+        "zh": "给每台 DSH 设备起名，让一个 agent 直接给另一台设备上的 agent 派活（基于 ds-harness-remote）。"
+      },
+      "author": "SYH",
+      "metadata": {
+        "category": "remote",
+        "keywords": [
+          "remote",
+          "peer",
+          "multi-device",
+          "agent"
+        ],
+        "labels": [
+          "experimental"
+        ]
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1794120032,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/xuanzhihang-s/dsh-peers-syh",
+            "commit": "6252a4778f4b731d13ec8e75050b2f1b5469acfc"
+          },
+          "engines": {
+            "dsh": ">=0.2.2-0 <0.3.0"
+          }
+        }
+      ],
+      "repository": {
+        "url": "https://github.com/xuanzhihang-s/dsh-peers-syh"
+      },
+      "homepage": "https://github.com/xuanzhihang-s/dsh-peers-syh#readme"
+    }
+  ]
+}
